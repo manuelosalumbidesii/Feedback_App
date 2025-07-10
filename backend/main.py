@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from typing import Dict
 import logging
 
+
 app = FastAPI()
 
 # Configure logging
@@ -19,18 +20,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # Pydantic model for input validation
 class Feedback(BaseModel):
     name: str
     message: str
+
 
 # Optional: health check endpoint
 @app.get("/")
 async def root() -> Dict[str, str]:
     return {"status": "OK", "message": "Feedback API is running"}
 
+
 # POST endpoint to receive feedback
 @app.post("/feedback", response_model=Dict[str, str])
 async def receive_feedback(feedback: Feedback) -> Dict[str, str]:
-    logger.info(f"📩 Feedback received from {feedback.name}: {feedback.message}")
+    logger.info(
+        f"📩 Feedback received from {feedback.name}: {feedback.message}"
+    )
     return {"message": f"Thank you, {feedback.name}! Feedback received."}
