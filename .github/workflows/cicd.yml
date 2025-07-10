@@ -37,7 +37,7 @@ jobs:
           echo "✅ Tests and lint passed"
 
       - name: Security scan using Trivy
-        uses: aquasecurity/trivy-action@v0.14.0
+        uses: aquasecurity/trivy-action@v0.14.1
         with:
           image-ref: 'feedback-${{ matrix.service }}:latest'
           format: 'table'
