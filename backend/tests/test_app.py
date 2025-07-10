@@ -1,6 +1,6 @@
 # backend/tests/test_app.py
 
-from app import app
+from main import app
 
 def test_home_status_code():
     tester = app.test_client()
