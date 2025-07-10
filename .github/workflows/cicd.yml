@@ -30,9 +30,10 @@ jobs:
       - name: Run unit tests and linting
         if: matrix.service == 'backend'
         run: |
-          pip install pytest flake8
+          pip install pytest flake8 httpx
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
           pytest backend/tests --junitxml=test-results.xml || true
-          flake8 backend 
+          flake8 backend
           echo "✅ Tests and linting complete"
 
       - name: Build Docker image
