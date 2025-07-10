@@ -1,6 +1,7 @@
+fastapi
+uvicorn
 flask
 pytest
 requests
-flake8  # for linting
-fastapi
-uvicorn
+flake8
+httpx  # ✅ required for FastAPI test client
