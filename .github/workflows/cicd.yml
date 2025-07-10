@@ -41,7 +41,7 @@ jobs:
           docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/feedback-${{ matrix.service }}:latest ./${{ matrix.service }}
 
       - name: Security scan using Trivy
-        uses: aquasecurity/trivy-action@v0.11.2
+        uses: aquasecurity/trivy-action@0.11.2
         with:
           image-ref: ${{ secrets.DOCKER_USERNAME }}/feedback-${{ matrix.service }}:latest
           format: 'table'
