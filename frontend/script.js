@@ -5,7 +5,7 @@ document.getElementById("feedback-form").addEventListener("submit", async functi
   const message = document.getElementById("message").value;
 
   try {
-    const response = await fetch("http://localhost:5000/feedback", {
+    const response = await fetch("/api/feedback", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
