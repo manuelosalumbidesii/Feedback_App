@@ -2,3 +2,5 @@ flask
 pytest
 requests
 flake8  # for linting
+fastapi
+uvicorn
