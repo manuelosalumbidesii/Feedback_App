@@ -32,7 +32,7 @@ jobs:
         run: |
           pip install pytest flake8
           pytest backend/tests --junitxml=test-results.xml || true
-          flake8 backend --exit-zero
+          flake8 backend 
           echo "✅ Tests and linting complete"
 
       - name: Build Docker image
