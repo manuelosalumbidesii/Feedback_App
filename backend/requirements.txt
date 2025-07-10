@@ -1,2 +1,4 @@
-fastapi
-uvicorn
+flask
+pytest
+requests
+flake8  # for linting
