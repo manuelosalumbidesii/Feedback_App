@@ -29,7 +29,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
-          echo "✅ Dependencies installed"
 
       - name: Run unit tests and linting
         if: matrix.service == 'backend'
@@ -38,7 +37,6 @@ jobs:
           export PYTHONPATH=$PYTHONPATH:$(pwd)
           pytest backend/tests --junitxml=test-results.xml || true
           flake8 backend
-          echo "✅ Tests and linting complete"
 
       - name: Build Docker image
         run: |
@@ -72,7 +70,7 @@ jobs:
       - name: Push to GHCR
         run: docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/feedback-${{ matrix.service }}:latest
 
-  ### ✅ QA Approval Pause Step
+  ### ✅ Step 1: QA Approval
   wait-for-qa:
     needs: build-and-push
     runs-on: ubuntu-latest
@@ -84,4 +82,29 @@ jobs:
       url: https://qa.example.com
     steps:
       - name: Wait for QA approval
-        run: echo "🛑 Waiting for QA approval before proceeding to production..."
+        run: echo "🛑 Waiting for QA approval before proceeding..."
+
+  ### ✅ Step 2: Client Approval before Production
+  wait-for-client:
+    needs: wait-for-qa
+    runs-on: ubuntu-latest
+    concurrency:
+      group: "wait-for-client-${{ github.sha }}"
+      cancel-in-progress: true
+    environment:
+      name: client-approval
+      url: https://staging.example.com
+    steps:
+      - name: Wait for client approval
+        run: echo "🛑 Waiting for client approval before production deployment..."
+
+  ### ✅ Step 3: Final Deploy to Production
+  deploy-prod:
+    needs: wait-for-client
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://prod.example.com
+    steps:
+      - name: Deploy to Production
+        run: echo "🚀 Deploying to production environment!"
