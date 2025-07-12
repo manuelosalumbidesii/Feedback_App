@@ -70,7 +70,7 @@ jobs:
       - name: Push to GHCR
         run: docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/feedback-${{ matrix.service }}:latest
 
-  ### ✅ Step 1: QA Approval
+  ### ✅ QA Approval Pause
   wait-for-qa:
     needs: build-and-push
     runs-on: ubuntu-latest
@@ -81,30 +81,19 @@ jobs:
       name: qa-approval
       url: https://qa.example.com
     steps:
-      - name: Wait for QA approval
-        run: echo "🛑 Waiting for QA approval before proceeding..."
+      - name: Pause for QA approval
+        run: echo "🛑 Waiting for QA to approve..."
 
-  ### ✅ Step 2: Client Approval before Production
-  wait-for-client:
-    needs: wait-for-qa
-    runs-on: ubuntu-latest
-    concurrency:
-      group: "wait-for-client-${{ github.sha }}"
-      cancel-in-progress: true
-    environment:
-      name: client-approval
-      url: https://staging.example.com
-    steps:
-      - name: Wait for client approval
-        run: echo "🛑 Waiting for client approval before production deployment..."
-
-  ### ✅ Step 3: Final Deploy to Production
+  ### ✅ Deploy to Production
   deploy-prod:
-    needs: wait-for-client
+    needs: wait-for-qa
     runs-on: ubuntu-latest
     environment:
       name: production
       url: https://prod.example.com
     steps:
       - name: Deploy to Production
-        run: echo "🚀 Deploying to production environment!"
+        run: |
+          echo "🚀 Deploying to production..."
+          # Replace below with real deployment steps
+          # e.g., terraform apply or aws ecs update-service
