@@ -97,3 +97,9 @@ jobs:
           echo "🚀 Deploying to production..."
           # Replace below with real deployment steps
           # e.g., terraform apply or aws ecs update-service
+      - name: Notify Slack of Successful Deployment
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+            --data '{
+              "text": "✅ *Deployment successful!*\n> Service: `${{ github.repository }}`\n> Commit: `${{ github.sha }}`\n> Env: *production*"
+            }' ${{ secrets.SLACK_WEBHOOK_URL }}
