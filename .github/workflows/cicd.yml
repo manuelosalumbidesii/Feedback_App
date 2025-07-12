@@ -8,10 +8,6 @@ on:
       - 'backend/**'
       - '.github/workflows/**'
 
-concurrency:
-  group: "ci-build-${{ matrix.service }}"
-  cancel-in-progress: true
-
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -19,6 +15,10 @@ jobs:
     strategy:
       matrix:
         service: [frontend, backend]
+
+    concurrency:
+      group: "ci-build-${{ matrix.service }}"
+      cancel-in-progress: true
 
     steps:
       - name: Checkout code
@@ -72,13 +72,16 @@ jobs:
       - name: Push to GHCR
         run: docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/feedback-${{ matrix.service }}:latest
 
-  ### ✅ Pause here for QA approval
+  ### ✅ QA Approval Pause Step
   wait-for-qa:
     needs: build-and-push
     runs-on: ubuntu-latest
+    concurrency:
+      group: "wait-for-qa-${{ github.sha }}"
+      cancel-in-progress: true
     environment:
       name: qa-approval
       url: https://qa.example.com
     steps:
       - name: Wait for QA approval
-        run: echo "✅ QA must approve this before proceeding."
+        run: echo "🛑 Waiting for QA approval before proceeding to production..."
