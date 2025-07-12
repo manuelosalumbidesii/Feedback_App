@@ -70,7 +70,6 @@ jobs:
       - name: Push to GHCR
         run: docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/feedback-${{ matrix.service }}:latest
 
-  ### ✅ QA Approval Pause
   wait-for-qa:
     needs: build-and-push
     runs-on: ubuntu-latest
@@ -84,7 +83,13 @@ jobs:
       - name: Pause for QA approval
         run: echo "🛑 Waiting for QA to approve..."
 
-  ### ✅ Deploy to Productionssssss
+      - name: Notify Slack - QA Approval Requested
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{
+            "text": "🧪 *QA Approval Needed!*\n> Commit: `${{ github.sha }}`\n> Repo: `${{ github.repository }}`\n> Click to approve QA in GitHub Actions"
+          }' ${{ secrets.SLACK_WEBHOOK_QA }}
+
   deploy-prod:
     needs: wait-for-qa
     runs-on: ubuntu-latest
@@ -95,11 +100,12 @@ jobs:
       - name: Deploy to Production
         run: |
           echo "🚀 Deploying to production..."
-          # Replace below with real deployment steps
-          # e.g., terraform apply or aws ecs update-service
-      - name: Notify Slack of Successful Deployment
+          # Add actual deployment script here
+          # e.g. terraform apply or aws ecs update-service
+
+      - name: Notify Slack - Production Deployed
         run: |
           curl -X POST -H 'Content-type: application/json' \
-            --data '{
-              "text": "✅ *Deployment successful!*\n> Service: `${{ github.repository }}`\n> Commit: `${{ github.sha }}`\n> Env: *production*"
-            }' ${{ secrets.SLACK_WEBHOOK_URL }}
+          --data '{
+            "text": "✅ *Deployment Successful!*\n> Service: `${{ github.repository }}`\n> Commit: `${{ github.sha }}`\n> Env: *production*"
+          }' ${{ secrets.SLACK_WEBHOOK_PROD }}
