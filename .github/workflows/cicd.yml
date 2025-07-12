@@ -84,7 +84,7 @@ jobs:
       - name: Pause for QA approval
         run: echo "🛑 Waiting for QA to approve..."
 
-  ### ✅ Deploy to Productionss
+  ### ✅ Deploy to Productionssssss
   deploy-prod:
     needs: wait-for-qa
     runs-on: ubuntu-latest
