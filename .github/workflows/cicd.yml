@@ -108,5 +108,5 @@ jobs:
           curl -X POST -H 'Content-type: application/json' \
           --data '{
             "text": "✅ *Deployment Successful!*\n> Service: `${{ github.repository }}`\n> Commit: `${{ github.sha }}`\n> Env: *production*"
-          }' ${{ secrets.SLACK_WEBHOOK_PROD }}
+          }' ${{ secrets.SLACK_WEBHOOK_URL_PROD }}
 #sdsd
