@@ -1,26 +1,44 @@
-name: Sample CICD Pipeline
+name: SAMPLE CICD PIPEPLINE
 
 on:
   push:
     branches: [main]
-  pull_request:
+  pull_request: 
     branches: [main]
-
 
 jobs:
   build-and-test:
-  runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    
-    - name: Setup python
-      uses: actions/setup-python@v3
-      with:
-        python-version: 3.12.3
+    steps:
 
-    - name: install the dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r backend/requirements.txt
+      - name: Checkout the code
+        uses: actions/checkout@v3
+      
+      - name: Setup Environment e.g python
+        uses: actions/setup-python@v3
+        with:
+          python-version@v3
+      
+      - name: Install dependencies
+        run: |
+          python pip -r install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Run unit testing ang linting
+        run: |
+          echo "sample sonarcloud"
+
+      - name: run linting
+        run: flake8 backend
+
+      - name: Build Docker images
+        run: |
+          build docker -t my-app:tag
+          
+      - name: Run security scans like Trivy
+        uses: aquasecurity/trivy-action
+      
+      - name: Login to image regisry like dockerhub or github oci or GHCR
+      - name: push to image registry
+      - name: 
