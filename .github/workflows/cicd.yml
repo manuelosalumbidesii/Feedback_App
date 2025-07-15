@@ -87,8 +87,9 @@ jobs:
         run: |
           curl -X POST -H 'Content-type: application/json' \
           --data '{
-            "text": "🧪 *QA Approval Needed!*\n> Commit: `${{ github.sha }}`\n> Repo: `${{ github.repository }}`\n> Click to approve QA in GitHub Actions"
+            "text": "🧪 *QA Approval Needed!*\n> Commit: `${{ github.sha }}`\n> Repo: `${{ github.repository }}`\n> [Click here to approve in GitHub Actions](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
           }' ${{ secrets.SLACK_WEBHOOK_URL_QA }}
+
 
   deploy-prod:
     needs: wait-for-qa
